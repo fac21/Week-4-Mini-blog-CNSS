@@ -20,6 +20,7 @@ server.get("/", (req, res) => {
       x;
     }
   }
+  .
 
   // if we don't have a search submission we show all movies
 
