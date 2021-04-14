@@ -1,5 +1,7 @@
 const express = require("express");
 const server = express();
+const movies = require("./movies.js");
+
 
 const PORT = 3000;
 
