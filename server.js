@@ -10,9 +10,68 @@ const staticHandler = express.static("public");
 
 server.listen(PORT, () => console.log(`Listen on http://localhost:${PORT}..`));
 
+
+
+// create homepage route
 server.get("/", (req, res) => {
-  res.send("hello");
+    let posts = "";
+   for (const movie of Object.values(movies)) {
+
+    posts += `<li>${movie.reviewer}</li>`;
+
+   }
+   const html = `
+  <!doctype html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Movie Review Blog!</title>
+    </head>
+    <body>
+        <h1>Movie Review Blog!</h1>
+      <ul>${posts}</ul>
+    </body>
+  </html>
+  `;
+   res.end(html);
 });
+
+server.post('/', (req, res) => {
+  const search = req.query.search || '';
+  console.log(search);
+  let posts = '';
+  for (const movie of Object.values(movies)) {
+    const match = movie.reviewer.toLowerCase().includes(search.toLowerCase());
+    console.log(match);
+    // if we don't have a search submission we show all movies
+    if (match || !search) {
+      posts += `<li>${movie.reviewer}</li>`;
+    }
+  }
+  const html = `
+  <!doctype html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Dogs!</title>
+    </head>
+    <body>
+        <h1>Movie Review Blog!</h1>
+         <form method="POST">
+        <label id="search">Search movies</label>
+        <input id="search" type="search" name="search" placeholder="E.g. superman">
+        <button>Search</button>
+        </form>
+      <ul>${posts}</ul>
+    </body>
+  </html>
+  `;
+  res.end(html);
+});
+
+
+
+
 
 // Serve the public directory incl css file
 server.use(staticHandler);
