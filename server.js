@@ -12,18 +12,13 @@ server.listen(PORT, () => console.log(`Listen on http://localhost:${PORT}..`));
 // create homepage route
 server.get("/", (req, res) => {
   let posts = "";
-  for (const movie of Object.values(movies)) {
-    console.log(movie);
-    const match = movie.toLowerCase().includes(search.toLowerCase());
-    if (match || !search) {
-      posts += `<li>${movie}</li>`;
-      x;
-    }
+  for (const movie of Object.keys(movies)) {
+    posts += `<li>
+      <a href="/search?movie=${movie}">${movie}</a>
+      </li>`;
   }
-  .
 
   // if we don't have a search submission we show all movies
-
   const html = `
   <!doctype html>
   <html>
@@ -33,10 +28,41 @@ server.get("/", (req, res) => {
     </head>
     <body>
         <h1>Movie Review Blog!</h1>
+        //ADD FORM
       <ul>${posts}</ul>
     </body>
   </html>
   `;
+  res.end(html);
+  //   res.redirect("/details");
+});
+
+server.get("/search", (req, res) => {
+  const search = req.query.movie || "";
+  console.log(search);
+  let posts = "";
+  //Creates an array of reviews for a movie.
+  const reviews = movies[search];
+  console.log(typeof reviews);
+  //if not reviews 'Hey you need to submit a review'
+  for (const review of reviews) {
+    posts += `<li>${review.reviewer}, ${review.post}</li>`;
+  }
+
+  // if we don't have a search submission we show all movies
+  const html = `
+    <!doctype html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Movie Review Blog!</title>
+      </head>
+      <body>
+          <h1>Movie Review Blog!</h1>
+        <ul>${posts}</ul>
+      </body>
+    </html>
+    `;
   res.end(html);
 });
 
