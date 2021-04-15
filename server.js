@@ -4,12 +4,12 @@ const movies = require("./movies.js");
 
 const PORT = 3000;
 
-// Create a handler to configure the middleware to serve this directory
+//Create a handler to configure the middleware to serve this directory
 const staticHandler = express.static("public");
 
 server.listen(PORT, () => console.log(`Listen on http://localhost:${PORT}..`));
 
-// create homepage route
+//Create homepage route
 server.get("/", (req, res) => {
   let posts = "";
   for (const movie of Object.keys(movies)) {
@@ -17,8 +17,10 @@ server.get("/", (req, res) => {
       <a href="/search?movie=${movie}">${movie}</a>
       </li>`;
   }
+ const newMovie = req.body;
+console.log({newMovie});
 
-  // if we don't have a search submission we show all movies
+//If we don't have a search submission we show all movies
   const html = `
   <!doctype html>
   <html>
@@ -30,11 +32,15 @@ server.get("/", (req, res) => {
     <body>
       <h1>Movie Review Blog!</h1>
       <form method="GET>
-       <label id="movie">Movie</label>
-       <input id="movie" name="movie" placeholder="Any movies...?">
+       <label id="search">Search Movie</label>
+       <input id="search" name="search" placeholder="Insert movie name">
        <button>Search</button>
       <form>
       <ul>${posts}</ul>
+      <p>If movie is not listed above, add it below</p>
+      <label id="movie">Add Movie</label>
+       <input id="movie" name="movie" placeholder="Add movie name">
+       <button>Add</button>
     </body>
   </html>
   `;
@@ -42,10 +48,11 @@ server.get("/", (req, res) => {
   //   res.redirect("/details");
 });
 
-server.get("/search", (req, res) => {
+const bodyParser = express.urlencoded({ extended: false });
+
+server.get("/search", bodyParser, (req, res) => {
   const movie = req.query.movie;
   const search = req.query.movie || "";
-  //console.log(search);
   let posts = "";
   //Creates an array of reviews for the movie searched
   const reviews = movies[search];
@@ -86,9 +93,9 @@ server.get("/search", (req, res) => {
   res.end(html);
 });
 
-// add movie
 
-const bodyParser = express.urlencoded({ extended: false });
+//Add movie
+//const bodyParser = express.urlencoded({ extended: false });
 
 server.post("/search", bodyParser, (req, res) => {
   const post = req.body;
