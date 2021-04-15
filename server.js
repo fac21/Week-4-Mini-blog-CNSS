@@ -24,11 +24,16 @@ server.get("/", (req, res) => {
   <html>
     <head>
       <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Movie Review Blog!</title>
     </head>
     <body>
-        <h1>Movie Review Blog!</h1>
-        //ADD FORM
+      <h1>Movie Review Blog!</h1>
+      <form method="GET>
+       <label id="movie">Movie</label>
+       <input id="movie" name="movie" placeholder="Any movies...?">
+       <button>Search</button>
+      <form>
       <ul>${posts}</ul>
     </body>
   </html>
@@ -41,67 +46,36 @@ server.get("/search", (req, res) => {
   const search = req.query.movie || "";
   console.log(search);
   let posts = "";
-  //Creates an array of reviews for a movie.
+  //Creates an array of reviews for the movie searched
   const reviews = movies[search];
   console.log(typeof reviews);
-  //if not reviews 'Hey you need to submit a review'
+  //If no reviews prompt to submit one 'Submit a review!'
+  if(!search){
+    posts += `<li>
+    <a href="/search?movie=${movie}">${movie}</a>
+    </li>`;
+    }
   for (const review of reviews) {
     posts += `<li>${review.reviewer}, ${review.post}</li>`;
   }
 
-  // if we don't have a search submission we show all movies
-  const html = `
-    <!doctype html>
-    <html>
-      <head>
-        <meta charset="utf-8">
-        <title>Movie Review Blog!</title>
-      </head>
-      <body>
-          <h1>Movie Review Blog!</h1>
-        <ul>${posts}</ul>
-      </body>
-    </html>
-    `;
-  res.end(html);
+ //If we don't have a search submission we show all movies
+ const html = `
+ <!doctype html>
+ <html>
+   <head>
+     <meta charset="utf-8">
+     <title>Movie Review Blog!</title>
+   </head>
+   <body>
+       <h1>Movie Review Blog!</h1>
+     <ul>${posts}</ul>
+   </body>
+ </html>
+ `;
+res.end(html);
 });
 
-// server.post("/", (req, res) => {
-//   const search = req.query.search || "";
-//   console.log(search);
-//   let posts = "";
-//   movies.forEach((movie) => {
-//     for (const movie of Object.values(movies)) {
-//       const match = movie.reviewer.toLowerCase().includes(search.toLowerCase());
-//       console.log(match);
-//       // if we don't have a search submission we show all movies
-//       if (match || !search) {
-//         posts += `<li>${movie.reviewer}</li>`;
-//       }
-//     }
-//     console.log(posts);
-//   });
-
-//   const html = `
-//   <!doctype html>
-//   <html>
-//     <head>
-//       <meta charset="utf-8">
-//       <title>Dogs!</title>
-//     </head>
-//     <body>
-//         <h1>Movie Review Blog!</h1>
-//          <form method="POST">
-//         <label id="search">Search movies</label>
-//         <input id="search" type="search" name="search" placeholder="E.g. superman">
-//         <button>Search</button>
-//         </form>
-//       <ul>${posts}</ul>
-//     </body>
-//   </html>
-//   `;
-//   res.end(html);
-// });
 
 // Serve the public directory incl css file
 server.use(staticHandler);
