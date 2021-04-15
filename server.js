@@ -17,10 +17,9 @@ server.get("/", (req, res) => {
       <a href="/search?movie=${movie}">${movie}</a>
       </li>`;
   }
- const newMovie = req.body;
-console.log({newMovie});
+ 
 
-//If we don't have a search submission we show all movies
+//No search submitted show all movies
   const html = `
   <!doctype html>
   <html>
@@ -47,8 +46,56 @@ console.log({newMovie});
   res.end(html);
   //   res.redirect("/details");
 });
-
 const bodyParser = express.urlencoded({ extended: false });
+
+//Create movie
+server.post("/", bodyParser, (req, res) => {
+  const movieTitle = req.query.movieName;
+  
+  //const post = req.body;
+  //const movieName = post.movieName;
+  const movieObj = { movieTitle : [] };
+  
+
+  movies[movieTitle] = [];
+ console.log({movieTitle});
+
+  const search = req.query.movie || "";
+  let posts = "";
+  for (const movie of Object.keys(movies)) {
+  posts += `<li>
+    <a href="/search?movie=${movie}">${movie}</a>
+    </li>`;
+}
+
+const html = `
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Review Blog!</title>
+  </head>
+  <body>
+    <h1>Movie Review Blog!</h1>
+    <form method="GET>
+     <label id="search">Search Movie</label>
+     <input id="search" name="search" placeholder="Insert movie name">
+     <button>Search</button>
+    <form>
+    <ul>${posts}</ul>
+    <p>If movie is not listed above, add it below</p>
+    <label id="movieName">Add Movie</label>
+     <input id="movieName" name="movieName" placeholder="Add movie name">
+     <button>Add</button>
+  </body>
+</html>
+`;
+res.end(html);
+});
+
+
+
 
 server.get("/search", bodyParser, (req, res) => {
   const movie = req.query.movie;
