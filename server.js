@@ -1,3 +1,4 @@
+const e = require("express");
 const express = require("express");
 const server = express();
 const movies = require("./movies.js");
@@ -45,17 +46,12 @@ server.get("/", (req, res) => {
 server.get("/search", (req, res) => {
   const movie = req.query.movie;
   const search = req.query.movie || "";
-  //console.log(search);
+
   let posts = "";
   //Creates an array of reviews for the movie searched
   const reviews = movies[search];
-  //console.log(typeof reviews);
+  console.log(reviews);
   //If no reviews prompt to submit one 'Submit a review!'
-  if (!search) {
-    posts += `<li>
-    <a href="/search?movie=${movie}">${movie}</a>
-    </li>`;
-  }
   for (const review of reviews) {
     posts += `<li>${review.reviewer}, ${review.post}</li>`;
   }
@@ -72,12 +68,12 @@ server.get("/search", (req, res) => {
        <h1>Add a Review!</h1>
        <form method="POST">
         <label id="movie"></label>
-        <input id="movie" name="movie" value="${movie}" disabled>
+        <input id="movie-input" name="movie" value="${movie}" disabled>
         <label id="reviewer">Reviewer's Name</label>
         <input id="reviewer" name="reviewer">
-        <label id="post">Review</label>
-        <input id="review" name="review" type="text" placeholder="Great movie">
-        <button>Post</button>
+        <label id="review">Review</label>
+        <input id="review-input" name="review" type="text" placeholder="Great movie">
+        <button id="post--btn">Post</button>
       </form>
      <ul>${posts}</ul>
    </body>
@@ -87,7 +83,6 @@ server.get("/search", (req, res) => {
 });
 
 // add movie
-
 const bodyParser = express.urlencoded({ extended: false });
 
 server.post("/search", bodyParser, (req, res) => {
