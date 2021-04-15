@@ -43,6 +43,7 @@ server.get("/", (req, res) => {
 });
 
 server.get("/search", (req, res) => {
+  const movie = req.query.movie;
   const search = req.query.movie || "";
   //console.log(search);
   let posts = "";
@@ -50,17 +51,17 @@ server.get("/search", (req, res) => {
   const reviews = movies[search];
   //console.log(typeof reviews);
   //If no reviews prompt to submit one 'Submit a review!'
-  if(!search){
+  if (!search) {
     posts += `<li>
     <a href="/search?movie=${movie}">${movie}</a>
     </li>`;
-    }
+  }
   for (const review of reviews) {
     posts += `<li>${review.reviewer}, ${review.post}</li>`;
   }
 
- //If we don't have a search submission we show all movies
- const html = `
+  //If we don't have a search submission we show all movies
+  const html = `
  <!doctype html>
  <html>
    <head>
@@ -70,6 +71,8 @@ server.get("/search", (req, res) => {
    <body>
        <h1>Add a Review!</h1>
        <form method="POST">
+        <label id="movie"></label>
+        <input id="movie" name="movie" value="${movie}" disabled>
         <label id="reviewer">Reviewer's Name</label>
         <input id="reviewer" name="reviewer">
         <label id="post">Review</label>
@@ -80,7 +83,7 @@ server.get("/search", (req, res) => {
    </body>
  </html>
  `;
-res.end(html);
+  res.end(html);
 });
 
 // add movie
@@ -88,27 +91,32 @@ res.end(html);
 const bodyParser = express.urlencoded({ extended: false });
 
 server.post("/search", bodyParser, (req, res) => {
-    const post = req.body;
-    const reviewer = post.reviewer;
-    const review = post.review;
+  const post = req.body;
+  const movie = post.movie;
+  const reviewer = post.reviewer;
+  const review = post.review;
+  console.log({ movie, post, reviewer, review });
+  console.log({ movies });
+  console.log({ movie });
+  const blogObj = { reviewer: reviewer, post: review };
 
-    console.log({ post, reviewer, review });
+  movies[movie].push(blogObj);
 
-    const search = req.query.movie || '';
-    //console.log(search);
-    let posts = '';
-    //Creates an array of reviews for the movie searched
-    const reviews = movies[search];
-    //console.log(typeof reviews);
-    //If no reviews prompt to submit one 'Submit a review!'
-    if (!search) {
-      posts += `<li>
+  const search = req.query.movie || "";
+  //console.log(search);
+  let posts = "";
+  //Creates an array of reviews for the movie searched
+  const reviews = movies[search];
+  //console.log(typeof reviews);
+  //If no reviews prompt to submit one 'Submit a review!'
+  if (!search) {
+    posts += `<li>
     <a href="/search?movie=${movie}">${movie}</a>
     </li>`;
-    }
-    for (const review of reviews) {
-      posts += `<li>${review.reviewer}, ${review.post}</li>`;
-    }
+  }
+  for (const review of reviews) {
+    posts += `<li>${review.reviewer}, ${review.post}</li>`;
+  }
 
   const html = `
  <!doctype html>
@@ -132,7 +140,6 @@ server.post("/search", bodyParser, (req, res) => {
  `;
   res.end(html);
 });
-
 
 // Serve the public directory incl css file
 server.use(staticHandler);
