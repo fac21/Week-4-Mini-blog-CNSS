@@ -44,11 +44,11 @@ server.get("/", (req, res) => {
 
 server.get("/search", (req, res) => {
   const search = req.query.movie || "";
-  console.log(search);
+  //console.log(search);
   let posts = "";
   //Creates an array of reviews for the movie searched
   const reviews = movies[search];
-  console.log(typeof reviews);
+  //console.log(typeof reviews);
   //If no reviews prompt to submit one 'Submit a review!'
   if(!search){
     posts += `<li>
@@ -68,12 +68,31 @@ server.get("/search", (req, res) => {
      <title>Movie Review Blog!</title>
    </head>
    <body>
-       <h1>Movie Review Blog!</h1>
+       <h1>Add a Review!</h1>
+       <form method="POST">
+        <label id="name">Reviewer's Name</label>
+        <input id="name" name="name">
+        <label id="post">Review</label>
+        <input id="post" name="post" type="text" placeholder="Great movie">
+        <button>Post</button>
+      </form>
      <ul>${posts}</ul>
    </body>
  </html>
  `;
 res.end(html);
+});
+
+// add movie
+
+const bodyParser = express.urlencoded({ extended: false });
+
+server.post("/search", bodyParser, (request, response) => {
+    const post = request.body;
+    console.log({ post });
+  const name = newDog.name.toLowerCase();
+  dogs[name] = newDog;
+  response.redirect("/");
 });
 
 
