@@ -70,10 +70,10 @@ server.get("/search", (req, res) => {
    <body>
        <h1>Add a Review!</h1>
        <form method="POST">
-        <label id="name">Reviewer's Name</label>
-        <input id="name" name="name">
+        <label id="reviewer">Reviewer's Name</label>
+        <input id="reviewer" name="reviewer">
         <label id="post">Review</label>
-        <input id="post" name="post" type="text" placeholder="Great movie">
+        <input id="review" name="review" type="text" placeholder="Great movie">
         <button>Post</button>
       </form>
      <ul>${posts}</ul>
@@ -87,12 +87,50 @@ res.end(html);
 
 const bodyParser = express.urlencoded({ extended: false });
 
-server.post("/search", bodyParser, (request, response) => {
-    const post = request.body;
-    console.log({ post });
-  const name = newDog.name.toLowerCase();
-  dogs[name] = newDog;
-  response.redirect("/");
+server.post("/search", bodyParser, (req, res) => {
+    const post = req.body;
+    const reviewer = post.reviewer;
+    const review = post.review;
+
+    console.log({ post, reviewer, review });
+
+    const search = req.query.movie || '';
+    //console.log(search);
+    let posts = '';
+    //Creates an array of reviews for the movie searched
+    const reviews = movies[search];
+    //console.log(typeof reviews);
+    //If no reviews prompt to submit one 'Submit a review!'
+    if (!search) {
+      posts += `<li>
+    <a href="/search?movie=${movie}">${movie}</a>
+    </li>`;
+    }
+    for (const review of reviews) {
+      posts += `<li>${review.reviewer}, ${review.post}</li>`;
+    }
+
+  const html = `
+ <!doctype html>
+ <html>
+   <head>
+     <meta charset="utf-8">
+     <title>Movie Review Blog!</title>
+   </head>
+   <body>
+       <h1>Add a Review!</h1>
+       <form method="POST">
+        <label id="reviewer">Reviewer's Name</label>
+        <input id="reviewer" name="reviewer">
+        <label id="post">Review</label>
+        <input id="review" name="review" type="text" placeholder="Great movie">
+        <button>Post</button>
+      </form>
+     <ul>${posts}</ul>
+   </body>
+ </html>
+ `;
+  res.end(html);
 });
 
 
