@@ -91,23 +91,18 @@ server.get("/search", (req, res) => {
 const bodyParser = express.urlencoded({ extended: false });
 
 server.post("/search", bodyParser, (req, res) => {
+  const movieTitle = req.query.movie;
   const post = req.body;
-  const movie = post.movie;
   const reviewer = post.reviewer;
   const review = post.review;
-  console.log({ movie, post, reviewer, review });
-  console.log({ movies });
-  console.log({ movie });
   const blogObj = { reviewer: reviewer, post: review };
 
-  movies[movie].push(blogObj);
+  movies[movieTitle].push(blogObj);
 
   const search = req.query.movie || "";
-  //console.log(search);
   let posts = "";
   //Creates an array of reviews for the movie searched
   const reviews = movies[search];
-  //console.log(typeof reviews);
   //If no reviews prompt to submit one 'Submit a review!'
   if (!search) {
     posts += `<li>
