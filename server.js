@@ -36,7 +36,7 @@ server.get("/", (req, res) => {
     <section>
     <h1>Movie Review Blog!</h1>
       <form method="GET" class="center">
-       <label id="movie">Movie</label>
+       <label for="movie">Movie</label>
        <input id="movie" name="movie" placeholder="mixer..">
        <button class="search--btn">Search</button>
       </form>
@@ -76,12 +76,12 @@ server.get("/search", (req, res) => {
    <section>
        <h1>Add a Review!</h1>
        <form method="POST" class="center">
-        <label id="movie"></label>
-        <input id="movie-input" name="movie" value="${movie}" disabled class="hidden">
-        <label id="reviewer">Reviewer's Name</label>
-        <input id="reviewer-input" name="reviewer" placeholder="Your name...">
-        <label id="review">Review</label>
-        <input id="review-input" name="review" type="text" placeholder="Your thoughts...">
+        <label for="movie"></label>
+        <input id="movie" name="movie" value="${movie}" disabled class="hidden">
+        <label for="reviewer">Reviewer's Name</label>
+        <input id="reviewer" name="reviewer" placeholder="Your name...">
+        <label for="review">Review</label>
+        <input id="review" name="review" type="text" placeholder="Your thoughts...">
         <button class="post--btn">Post</button>
       </form>
       <aside class="movie-review-list">
@@ -126,10 +126,10 @@ server.post("/search", bodyParser, (req, res) => {
    <body>
        <h1>Add a Review!</h1>
        <form method="POST" class="center">
-        <label id="reviewer">Reviewer's Name</label>
-        <input id="reviewer-input" name="reviewer" placeholder="Your name...">
-        <label id="post">Review</label>
-        <input id="review" name="review" type="text" placeholder="Your thoughts...">
+        <label for="reviewer">Reviewer's Name</label>
+        <input id="reviewer" name="reviewer" placeholder="Your name...">
+        <label for="post">Review</label>
+        <input id="post" name="review" type="text" placeholder="Your thoughts...">
         <button class="post--btn">Post</button>
       </form>
       <aside class="movie-review-list">
