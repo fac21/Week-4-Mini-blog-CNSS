@@ -1,3 +1,94 @@
-h1 {
-  color: red;
+@import url("https://fonts.googleapis.com/css2?family=Poor+Story&display=swap");
+
+:root {
+  --font: "Poor Story", cursive;
+  --tittle-color: hsl(22, 96%, 43%);
+  --black: rgb(14, 4, 4);
+  --search-button-color: hsl(50, 70%, 51%);
+  --font-size: 26px;
+  --type-color: hsl(5, 61%, 62%);
 }
+
+body {
+  background-image: url(https://res.cloudinary.com/das6ciypl/image/upload/v1618520021/jeremy-yap-J39X2xX_8CQ-unsplash_hi1vjy.jpg);
+  font-family: var(--font);
+  font-size: var(--font-size);
+  color: var(--type-color);
+  background-color: ivory;
+}
+
+h1 {
+  color: var(--tittle-color);
+}
+
+.search--btn,
+.post--btn {
+  border: none;
+  background-color: var(--search-button-color);
+  color: var(--black);
+  font-style: italic;
+  font-family: var(--font);
+  font-size: xx-large;
+}
+
+.search--btn::after {
+  content: " 📽 ";
+}
+
+.post--btn::after {
+  content: " 📮 ";
+}
+
+h1,
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.movie-review-list {
+  margin-left: 600px;
+}
+
+.movie-review-list li::before {
+  content: "• ";
+  color: var(--search-button-color);
+}
+
+.movie-review-list li {
+  list-style-type: none;
+}
+
+.movie-review-list li a {
+  text-decoration: underline;
+  color: var(--color);
+}
+
+#review,
+#reviewer-input {
+  margin-right: 1rem;
+}
+#post {
+  margin-left: 1rem;
+}
+
+#reviewer,
+#post,
+#review-input,
+#movie {
+  margin-right: 0.5rem;
+}
+
+section {
+  margin-top: 10rem;
+}
+
+/* Node is server-side, media-queries are client-side. */
+/* @media only screen and (max-width: 600px) {
+  .movie-review-list {
+    margin-left: 350px;
+  }
+} */
