@@ -1,18 +1,18 @@
-const e = require('express');
-const express = require('express');
+const e = require("express");
+const express = require("express");
 const server = express();
-const movies = require('./movies.js');
+const movies = require("./movies.js");
 
 const PORT = 3000;
 
 // Create a handler to configure the middleware to serve this directory
-const staticHandler = express.static('public');
+const staticHandler = express.static("public");
 
 server.listen(PORT, () => console.log(`Listen on http://localhost:${PORT}..`));
 
 // Create initial homepage route with no search submitted
-server.get('/', (req, res) => {
-  let posts = '';
+server.get("/", (req, res) => {
+  let posts = "";
   for (const movie of Object.keys(movies)) {
     posts += `<li>
       <a href="/search?movie=${movie}">${movie}</a>
@@ -31,16 +31,18 @@ server.get('/', (req, res) => {
     </head>
     <body>
       <h1>Movie Review Blog!</h1>
-      <form method="GET>
+      <form method="POST" action="/search">
        <label id="search">Search Movie</label>
        <input id="search-input" name="search" placeholder="Insert movie name">
        <button>Search</button>
-      <form>
+      </form>
       <ul>${posts}</ul>
       <p>If movie is not listed above, add it below</p>
-      <label id="addMovie">Add Movie</label>
+      <form method="POST">
+        <label id="addMovie">Add Movie</label>
        <input id="addMovie-input" name="addMovie" placeholder="Add movie name">
        <button>Add</button>
+      </form>
     </body>
   </html>
   `;
@@ -49,56 +51,28 @@ server.get('/', (req, res) => {
 
 const bodyParser = express.urlencoded({ extended: false });
 
+// Search for a movie
+server.post("/search", bodyParser, (req, res) => {
+  console.log("hey why are you not running");
+  console.log(req.body);
+  res.redirect("/");
+});
+
 // Add a movie
-server.post('/', bodyParser, (req, res) => {
-  console.log('hey why are you not running');
+server.post("/", bodyParser, (req, res) => {
   const newMovie = req.query.addMovie;
   movies[newMovie] = [];
   console.log(movies);
   console.log(newMovie);
-
-  //   let posts = '';
-
-  //   for (const movie of Object.keys(movies)) {
-  //     posts += `<li>
-  //     <a href="/search?movie=${movie}">${movie}</a>
-  //     </li>`;
-  //   }
-
-  //   const html = `
-  // <!doctype html>
-  //   <html lang="en">
-  //     <head>
-  //       <meta charset="utf-8">
-  //       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  //       <meta name="description" content="Movie blog">
-  //       <link rel="stylesheet" type="text/css" href="style.css">
-  //       <title>Movie Review Blog!</title>
-  //     </head>
-  //   <body>
-  //     <h1>Movie Review Blog!</h1>
-  //     <form method="GET>
-  //      <label id="search">Search Movie</label>
-  //      <input id="search-input" name="search" placeholder="Insert movie name">
-  //      <button>Search</button>
-  //     <form>
-  //     <ul>${posts}</ul>
-  //     <p>If movie is not listed above, add it below</p>
-  //     <label id="addMovie">Add Movie</label>
-  //      <input id="addMovie-input" name="addMovie" placeholder="Add movie name">
-  //      <button>Add</button>
-  //   </body>
-  // </html>
-  // `;
-  res.redirect('/');
+  res.redirect("/");
 });
 
 // Search route where movies reviews are
-server.get('/search', bodyParser, (req, res) => {
+server.get("/search", bodyParser, (req, res) => {
   const movie = req.query.movie;
-  const search = req.query.movie || '';
+  const search = req.query.movie || "";
 
-  let posts = '';
+  let posts = "";
   //Creates an array of reviews for the movie searched
   const reviews = movies[search];
   console.log(reviews);
@@ -136,7 +110,7 @@ server.get('/search', bodyParser, (req, res) => {
 });
 
 // Add a movie review
-server.post('/search', bodyParser, (req, res) => {
+server.post("/search", bodyParser, (req, res) => {
   const movieTitle = req.query.movie;
   const post = req.body;
   const reviewer = post.reviewer;
@@ -145,8 +119,8 @@ server.post('/search', bodyParser, (req, res) => {
 
   movies[movieTitle].push(blogObj);
 
-  const search = req.query.movie || '';
-  let posts = '';
+  const search = req.query.movie || "";
+  let posts = "";
   //Creates an array of reviews for the movie searched
   const reviews = movies[search];
   //If no reviews prompt to submit one 'Submit a review!'
