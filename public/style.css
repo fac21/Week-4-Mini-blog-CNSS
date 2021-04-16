@@ -22,7 +22,8 @@ h1 {
 }
 
 .search--btn,
-.post--btn {
+.post--btn,
+.add--btn {
   border: none;
   background-color: var(--search-button-color);
   color: var(--black);
@@ -92,3 +93,21 @@ section {
     margin-left: 350px;
   }
 } */
+
+.center-flex {
+  display: flex;
+}
+
+p {
+  margin-top: 5rem;
+  color: var(--tittle-color);
+}
+
+#search-input,
+#addMovie-input {
+  margin-right: 1rem;
+}
+
+label {
+  margin-right: 1rem;
+}
