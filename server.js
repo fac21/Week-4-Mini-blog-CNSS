@@ -1,7 +1,10 @@
-const e = require("express");
+//Imports
 const express = require("express");
 const server = express();
 const movies = require("./movies.js");
+
+//Static Files
+server.use("/public", express.static("public"));
 
 const PORT = 3000;
 
@@ -10,7 +13,7 @@ const staticHandler = express.static("public");
 
 server.listen(PORT, () => console.log(`Listen on http://localhost:${PORT}..`));
 
-// create homepage route
+// create homepage routes
 server.get("/", (req, res) => {
   let posts = "";
   for (const movie of Object.keys(movies)) {
@@ -26,16 +29,21 @@ server.get("/", (req, res) => {
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel ="stylesheet" type ="text/css" href ="./public/style.css" />
       <title>Movie Review Blog!</title>
     </head>
     <body>
-      <h1>Movie Review Blog!</h1>
-      <form method="GET>
+    <section>
+    <h1>Movie Review Blog!</h1>
+      <form method="GET" class="center">
        <label id="movie">Movie</label>
-       <input id="movie" name="movie" placeholder="Any movies...?">
-       <button>Search</button>
-      <form>
+       <input id="movie" name="movie" placeholder="mixer..">
+       <button class="search--btn">Search</button>
+      </form>
+      <aside class="movie-review-list">
       <ul>${posts}</ul>
+      </aside>
+      </section>
     </body>
   </html>
   `;
@@ -50,7 +58,6 @@ server.get("/search", (req, res) => {
   let posts = "";
   //Creates an array of reviews for the movie searched
   const reviews = movies[search];
-  console.log(reviews);
   //If no reviews prompt to submit one 'Submit a review!'
   for (const review of reviews) {
     posts += `<li>${review.reviewer}, ${review.post}</li>`;
@@ -62,20 +69,25 @@ server.get("/search", (req, res) => {
  <html>
    <head>
      <meta charset="utf-8">
+     <link rel ="stylesheet" type ="text/css" href ="./public/style.css" />
      <title>Movie Review Blog!</title>
    </head>
    <body>
+   <section>
        <h1>Add a Review!</h1>
-       <form method="POST">
+       <form method="POST" class="center">
         <label id="movie"></label>
-        <input id="movie-input" name="movie" value="${movie}" disabled>
+        <input id="movie-input" name="movie" value="${movie}" disabled class="hidden">
         <label id="reviewer">Reviewer's Name</label>
-        <input id="reviewer" name="reviewer">
+        <input id="reviewer-input" name="reviewer" placeholder="Your name...">
         <label id="review">Review</label>
-        <input id="review-input" name="review" type="text" placeholder="Great movie">
-        <button id="post--btn">Post</button>
+        <input id="review-input" name="review" type="text" placeholder="Your thoughts...">
+        <button class="post--btn">Post</button>
       </form>
-     <ul>${posts}</ul>
+      <aside class="movie-review-list">
+      <ul>${posts}</ul>
+      </aside>
+      </section>
    </body>
  </html>
  `;
@@ -90,7 +102,7 @@ server.post("/search", bodyParser, (req, res) => {
   const post = req.body;
   const reviewer = post.reviewer;
   const review = post.review;
-  const blogObj = { reviewer: reviewer, post: review };
+  const blogObj = { reviewer: review, post: review };
 
   movies[movieTitle].push(blogObj);
 
@@ -99,11 +111,6 @@ server.post("/search", bodyParser, (req, res) => {
   //Creates an array of reviews for the movie searched
   const reviews = movies[search];
   //If no reviews prompt to submit one 'Submit a review!'
-  if (!search) {
-    posts += `<li>
-    <a href="/search?movie=${movie}">${movie}</a>
-    </li>`;
-  }
   for (const review of reviews) {
     posts += `<li>${review.reviewer}, ${review.post}</li>`;
   }
@@ -113,18 +120,21 @@ server.post("/search", bodyParser, (req, res) => {
  <html>
    <head>
      <meta charset="utf-8">
+     <link rel ="stylesheet" type ="text/css" href ="./public/style.css" />
      <title>Movie Review Blog!</title>
    </head>
    <body>
        <h1>Add a Review!</h1>
-       <form method="POST">
+       <form method="POST" class="center">
         <label id="reviewer">Reviewer's Name</label>
-        <input id="reviewer" name="reviewer">
+        <input id="reviewer-input" name="reviewer" placeholder="Your name...">
         <label id="post">Review</label>
-        <input id="review" name="review" type="text" placeholder="Great movie">
-        <button>Post</button>
+        <input id="review" name="review" type="text" placeholder="Your thoughts...">
+        <button class="post--btn">Post</button>
       </form>
-     <ul>${posts}</ul>
+      <aside class="movie-review-list">
+      <ul>${posts}</ul>
+      </aside>
    </body>
  </html>
  `;
