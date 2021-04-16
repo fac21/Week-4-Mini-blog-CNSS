@@ -1,4 +1,3 @@
-
 const express = require("express");
 const server = express();
 const movies = require("./movies.js");
@@ -12,7 +11,6 @@ const PORT = 3000;
 const staticHandler = express.static("public");
 
 server.listen(PORT, () => console.log(`Listen on http://localhost:${PORT}..`));
-
 
 // Create initial homepage route with no search submitted
 server.get("/", (req, res) => {
@@ -37,25 +35,20 @@ server.get("/", (req, res) => {
     <body>
     <section>
       <h1>Movie Review Blog!</h1>
-
-
       <form method="POST" action="/search" class="center">
        <label for="search-input" id="search">Search Movie</label>
        <input id="search-input" name="search" placeholder="Insert movie name">
-       <button class="search--btn>Search</button>
+       <button class="search--btn">Search</button>
       </form>
-
-    
       <aside class="movie-review-list">
-
       <ul>${posts}</ul>
       </aside>
        </section>
-      <p>If movie is not listed above, add it below</p>
-      <form method="POST">
-        <label id="addMovie">Add Movie</label>
-       <input id="addMovie-input" name="addMovie" placeholder="Add movie name">
-       <button>Add</button>
+       <p class="center">If movie is not listed above, add it below</p>
+       <form method="POST" class="center">
+         <label for="addMovie">Add Movie</label>
+        <input id="addMovie-input" name="addMovie" placeholder="Add movie name">
+        <button class="add--btn">Add</button>
       </form>
     </body>
   </html>
